@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="../assets/images/favicon.png" type="image/png"/>
+    <title>Word Game Helper | Wordle</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+</head>
+<body>
+<div class="container">
+    <p class="lead">Enter attempts to see possible words.</p>
+    <p>Use suffixes to show the outcome:
+        <code>+</code> correct place,
+        <code>?</code> wrong place,
+        and <code>-</code> not in word.
+    </p>
+    <div class="form-floating mt-3">
+        <input type="text" class="form-control" id="entry1" placeholder="First attempt" autocomplete="off"
+               maxlength="10"
+               minlength="10">
+        <label for="entry1">1️⃣ First attempt</label>
+    </div>
+    <div class="form-floating mt-3">
+        <input type="text" class="form-control" id="entry2" placeholder="Second attempt" autocomplete="off"
+               maxlength="10" minlength="10">
+        <label for="entry2">2️⃣ Second attempt</label>
+    </div>
+    <div class="form-floating mt-3">
+        <input type="text" class="form-control" id="entry3" placeholder="Third attempt" autocomplete="off"
+               maxlength="10"
+               minlength="10">
+        <label for="entry3">3️⃣ Third attempt</label>
+    </div>
+    <div class="form-floating mt-3">
+        <input type="text" class="form-control" id="entry4" placeholder="Fourth attempt" autocomplete="off"
+               maxlength=10" minlength="10">
+        <label for="entry4">4️⃣ Fourth attempt</label>
+    </div>
+
+    <h4 style="text-align: center;">Possible Words</h4>
+
+    <div class="row">
+        <div class="col">
+            <div class="card my-1">
+                <div class="card-body"><p class="card-text">poiuy</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card my-1">
+                <div class="card-body"><p class="card-text">asdfg</div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card my-1">
+                <div class="card-body"><p class="card-text">mnbvc</p></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card my-1">
+                <div class="card-body"><p class="card-text">qwert</p></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card my-1">
+                <div class="card-body"><p class="card-text">poiuy</p></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card my-1">
+                <div class="card-body"><p class="card-text">asdfg</p></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card my-1">
+                <div class="card-body"><p class="card-text">mnbvc</p></div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card my-1">
+                <div class="card-body"><p class="card-text">qwert</p></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+<script src="index.js" type="module"></script>
+</body>
+</html>
+

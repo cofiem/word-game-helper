@@ -1,0 +1,14 @@
+{
+  "name": "word-game-helper",
+  "version": "1.0.0",
+  "description": "Word game helpers.",
+  "private": true,
+  "scripts": {
+    "data:wordle": "node data/scripts/wordle.mjs"
+  },
+  "license": "MIT",
+  "config": {
+    "sources": "./data/src/scowl-2020.12.07/final",
+    "destFive": "./data/ready/wordle.json"
+  }
+}
