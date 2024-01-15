@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Word game helpers.",
   "private": true,
+  "type": "module",
   "scripts": {
     "data:wordle": "node data/scripts/wordle.mjs"
   },

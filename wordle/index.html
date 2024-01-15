@@ -16,29 +16,40 @@
         <code>?</code> wrong place,
         and <code>-</code> not in word.
     </p>
-    <form class="needs-validation" novalidate>
+    <form class="needs-validation" novalidate data-wordle-target="form">
     <div class="form-floating mt-3">
         <input type="text" class="form-control" id="entry1" placeholder="First attempt" autocomplete="off"
-               maxlength="10" minlength="10" data-wordle-target="entry1" data-action="keyup->wordle#entryChanged">
+               maxlength="10" minlength="10" data-wordle-target="attempt" data-action="keyup->wordle#entryChanged">
         <label for="entry1">1️⃣ First attempt</label>
     </div>
     <div class="form-floating mt-3">
         <input type="text" class="form-control" id="entry2" placeholder="Second attempt" autocomplete="off"
-               maxlength="10" minlength="10" data-wordle-target="entry2" data-action="keyup->wordle#entryChanged">
+               maxlength="10" minlength="10" data-wordle-target="attempt" data-action="keyup->wordle#entryChanged">
         <label for="entry2">2️⃣ Second attempt</label>
     </div>
     <div class="form-floating mt-3">
         <input type="text" class="form-control" id="entry3" placeholder="Third attempt" autocomplete="off"
-               maxlength="10" minlength="10" data-wordle-target="entry3" data-action="keyup->wordle#entryChanged">
+               maxlength="10" minlength="10" data-wordle-target="attempt" data-action="keyup->wordle#entryChanged">
         <label for="entry3">3️⃣ Third attempt</label>
     </div>
     <div class="form-floating mt-3">
         <input type="text" class="form-control" id="entry4" placeholder="Fourth attempt" autocomplete="off"
-               maxlength=10" minlength="10" data-wordle-target="entry4" data-action="keyup->wordle#entryChanged">
+               maxlength=10" minlength="10" data-wordle-target="attempt" data-action="keyup->wordle#entryChanged">
         <label for="entry4">4️⃣ Fourth attempt</label>
     </div>
+    <div class="form-floating mt-3">
+        <input type="text" class="form-control" id="entry5" placeholder="Fifth attempt" autocomplete="off"
+               maxlength=10" minlength="10" data-wordle-target="attempt" data-action="keyup->wordle#entryChanged">
+        <label for="entry5">4️⃣ Fifth attempt</label>
+    </div>
     </form>
-    <h4 style="text-align: center;">Possible Words</h4>
+    <h4 style="text-align: center;">
+        Showing
+        <span data-wordle-target="wordsShown"></span>
+        of
+        <span data-wordle-target="wordsMatch"></span>
+        Possible Words
+    </h4>
 
     <div class="row" data-wordle-target="list">
 
