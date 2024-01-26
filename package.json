@@ -5,11 +5,17 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "data:wordle": "node data/scripts/wordle.mjs"
+    "data:wordle": "node data/scripts/wordle.mjs",
+    "test": "vitest",
+    "coverage": "vitest --coverage --no-watch"
   },
   "license": "MIT",
   "config": {
     "sources": "./data/src/scowl-2020.12.07/final",
     "destFive": "./data/ready/wordle.json"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "^1.2.1",
+    "vitest": "^1.2.1"
   }
 }

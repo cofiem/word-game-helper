@@ -1,8 +1,7 @@
 import {Application, Controller} from "https://unpkg.com/@hotwired/stimulus@3.2.2/dist/stimulus.js"
+import WordleWords from "./words.js";
 
 window.Stimulus = Application.start()
-
-// TODO: .checkValidity()
 
 
 class WordleController extends Controller {
@@ -14,6 +13,11 @@ class WordleController extends Controller {
      */
     wordData;
 
+    /**
+     * Helper class.
+     */
+    wordleWords;
+
     connect() {
         this.load();
     }
@@ -22,6 +26,9 @@ class WordleController extends Controller {
      * Load the word data from the server.
      */
     load() {
+        if(!this.wordleWords){
+            this.wordleWords = new WordleWords();
+        }
         if (!this.wordData) {
             fetch(this.urlValue)
                 .then(response => response.json())
@@ -73,7 +80,7 @@ class WordleController extends Controller {
 
     /**
      * Add a word card.
-     * @param value The word.
+     * @param {string} value The word.
      */
     addWordCard(value) {
         const item = this.itemTemplateTarget.content.cloneNode(true);
@@ -82,129 +89,31 @@ class WordleController extends Controller {
         this.listTarget.append(item);
     }
 
-    /*
-    Examples:
-
-    0: a-r-i-s-e-
-    1: t-o-u?g-h+
-    2: b-u+n+c+h+
-    3: p-u+n+c+h+
-    4: l+u+n+c+h+
-
-    0: a-r?i-s?e+
-
-     */
-
     /**
      * Parse the attempt entry from the element.
      * @param element The element containing the entry value.
-     * @return {{raw: *}} Parsed result.
+     * @return {{filter: (null|{'symbol': string, 'letter': string}[]), raw:string, error: null|string, match: string[]}[]} Parsed result.
      */
     attemptEntry(element) {
         const raw = element.value;
-        const re = /[a-z][\-+?]/gi;
-        const charSymbols = raw.match(re);
-        if (!charSymbols) {
-            return {
-                'raw': raw,
-                'filter': null,
-                'error': "Invalid format.",
-            }
-        }
-        if (charSymbols.length !== 5) {
-            return {
-                'raw': raw,
-                'filter': null,
-                'error': "Must be 10 characters: 5 letters and 5 symbols.",
-            }
-        }
-
-        const filter = charSymbols.map((item) => {
-            return {'letter': item[0], 'symbol': item[1]}
-        })
-        return {
-            'raw': raw,
-            'filter': filter,
-            'error': null,
-        }
+        return this.wordleWords.buildAttempt(raw);
     }
 
     /**
      * Get the words that fulfill the restrictions created by the entered attempts.
-     * @param {{raw:string,filter:{name, symbol},error:string}[]} filters
+     * @param {{filter: (null|{'symbol': string, 'letter': string}[]), raw:string, error: null|string, match: string[]}[]} attempts
      * @return {{show:string[],availableCount:number} The possible words.
      */
-    filterWords(filters) {
-        // build a mapping of allowed characters in each position
-        const attemptTargets = this.attemptTargets;
-        const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-        const mapping = {'any': {'present': '', 'absent': ''}};
-        attemptTargets.forEach((element, index) => {
-            mapping[index] = {'present': '', 'absent': ''};
-        });
-        (filters || []).forEach((filter, index) => {
-            (filter.filter || []).forEach((filterItem, filterItemIndex) => {
-                const letter = filterItem.letter;
-                const symbol = filterItem.symbol;
-                if (symbol === '+') {
-                    // +: must be at that index, don't know about other indexes
-                    this.addLetter(mapping, filterItemIndex, 'present', letter);
-
-                } else if (symbol === '?') {
-                    // ?: cannot be at that index
-                    this.addLetter(mapping, filterItemIndex, 'absent', letter);
-
-                    // must be at least one of the other indexes
-                    this.addLetter(mapping, 'any', 'present', letter);
-
-                } else if (symbol === '-') {
-                    // -: cannot be at any index
-                    this.addLetter(mapping, 'any', 'absent', letter);
-                }
-            });
-        });
-
-        // filter the words
-        let words = this.wordData.filter((word) => {
-            // word must contain the 'any' 'present' letters
-            const anyPresent = Array.from(mapping.any.present)
-            for (const char of anyPresent) {
-                if (anyPresent.length > 0 && !word.includes(char)) {
-                    return false;
-                }
-            }
-
-            // word must not contain the 'any' 'absent' letters
-            const anyAbsent = Array.from(mapping.any.absent)
-            for (const char of anyAbsent) {
-                if (anyAbsent.length > 0 && word.includes(char)) {
-                    return false;
-                }
-            }
-
-            // check the known char at index
-            const wordArray = Array.from(word);
-            for (let index = 0; index < wordArray.length; index++) {
-                const char = wordArray[index];
-                if (mapping[index].absent.length > 0 && mapping[index].absent.includes(char)) {
-                    // word must not contain absent char in index
-                    return false;
-                }
-                if (mapping[index].present.length > 0 && !mapping[index].present.includes(char)) {
-                    // word must contain present char at index
-                    return false;
-                }
-            }
-
-            return true;
-        });
+    filterWords(attempts) {
+        const filter = this.wordleWords.buildFilter(attempts);
+        let words = this.wordleWords.filterWords(this.wordData, filter) || this.wordData;
 
         const availableWords = words.length;
         const maxShownWords = 30
         const randomWordsThreshold = 50;
 
         // If there are more than 50 words, choose a random set of words.
-        if (availableWords < 1 || availableWords > randomWordsThreshold) {
+        if (availableWords > randomWordsThreshold) {
             const result = [];
             let selectedWord = null;
             do {
@@ -218,25 +127,19 @@ class WordleController extends Controller {
 
         // If there are too many words, show only the first 30 words.
         const outcome = words.slice(0, maxShownWords);
-        console.log(filters, mapping, words, outcome, availableWords);
+
         return {
-            'shown':outcome,
-            'availableCount':availableWords,
+            'shown': outcome,
+            'availableCount': availableWords,
         };
     }
 
-    addLetter(container, index, name, letter) {
-        if (!container[index][name].includes(letter)) {
-            container[index][name] += letter;
-        }
-    }
-
-    validate(element, attemptInfo){
+    validate(element, attemptInfo) {
         const value = element.value;
-        if (value.length < 1){
+        if (value.length < 1) {
             element.classList.add('is-valid');
             element.classList.remove('is-invalid');
-        } else if (value.length !== 10 || attemptInfo.error || !attemptInfo.filter){
+        } else if (value.length !== 10 || attemptInfo.error || !attemptInfo.filter) {
             element.classList.add('is-invalid');
             element.classList.remove('is-valid');
         }
