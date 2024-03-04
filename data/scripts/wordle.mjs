@@ -16,6 +16,10 @@ async function findFiles(dirPath) {
         'abbreviations',
         'proper-names',
         'contractions',
+        'roman-numerals',
+        'hacker',
+        '.80',
+        '.95',
     ];
     try {
         const foundFiles = [];
@@ -30,7 +34,7 @@ async function findFiles(dirPath) {
             }
 
             const isExcluded = exclude.some((value) => {
-                file.includes(value)
+                return file.includes(value)
             });
             if (isExcluded) {
                 continue;
@@ -85,7 +89,10 @@ async function createFiveWordData(sourcePaths, destPath) {
     const words = await generateWordData(sourcePaths);
     for (const word of words) {
         // get the words, in 'Compatibility Decomposition' form and lower case
-        const norm = normaliseWord(word);
+        let norm = normaliseWord(word);
+        if (norm.endsWith("'s")){
+            norm = norm.substring(0, norm.length - 2);
+        }
         const azOnly = norm.replace(/[^a-z]/gi, '');
         if (azOnly.length === 5) {
             results.add(azOnly);
