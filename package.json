@@ -6,13 +6,15 @@
   "type": "module",
   "scripts": {
     "data:wordle": "node data/scripts/wordle.mjs",
+    "data:wordbind": "node data/scripts/wordbind.mjs",
     "test": "vitest",
     "coverage": "vitest --coverage --no-watch"
   },
   "license": "MIT",
   "config": {
     "sources": "./data/src/scowl-2020.12.07/final",
-    "destFive": "./data/ready/wordle.json"
+    "destFive": "./data/ready/wordle.json",
+    "destAtLeastFive": "./data/ready/wordbind.json"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^1.2.1",
