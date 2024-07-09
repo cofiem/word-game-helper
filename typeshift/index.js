@@ -4,7 +4,7 @@ import Helper from "./impl.js";
 window.Stimulus = Application.start()
 
 
-class WordBindController extends Controller {
+class TypeShiftController extends Controller {
     static targets = ["puzzle", "list", "item", "itemTemplate", "wordsShown", "form"];
     static values = {url: String};
 
@@ -125,4 +125,4 @@ class WordBindController extends Controller {
     }
 }
 
-Stimulus.register("wordbind", WordBindController);
+Stimulus.register("typeshift", TypeShiftController);

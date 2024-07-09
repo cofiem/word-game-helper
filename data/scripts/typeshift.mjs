@@ -100,6 +100,6 @@ async function createAtLeastFiveWordData(sourcePaths, destPath) {
 
 // generate the data file
 const sourcePaths = process.env.npm_package_config_sources.split(';').filter((value) => !!value);
-const destPath = process.env.npm_package_config_wordbindData;
+const destPath = process.env.npm_package_config_typeShiftData;
 console.log(sourcePaths);
 await createAtLeastFiveWordData(sourcePaths, destPath);

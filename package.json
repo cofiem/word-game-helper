@@ -7,14 +7,16 @@
   "scripts": {
     "data:wordle": "node data/scripts/wordle.mjs",
     "data:wordbind": "node data/scripts/wordbind.mjs",
+    "data:typeshift": "node data/scripts/typeshift.mjs",
     "test": "vitest",
     "coverage": "vitest --coverage --no-watch"
   },
   "license": "MIT",
   "config": {
     "sources": "./data/src/scowl-2020.12.07/final",
-    "destFive": "./data/ready/wordle.json",
-    "destAtLeastFive": "./data/ready/wordbind.json"
+    "wordleData": "./data/ready/wordle.json",
+    "wordbindData": "./data/ready/wordbind.json",
+    "typeShiftData": "./data/ready/typeshift.json"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^1.2.1",

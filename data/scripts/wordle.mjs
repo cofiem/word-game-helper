@@ -1,8 +1,6 @@
 import fs from "node:fs/promises";
 import * as path from "path";
 
-// Word list source: http://wordlist.aspell.net/scowl-readme/
-
 function normaliseWord(word) {
     return word.normalize("NFKD").toLowerCase()
 }
@@ -105,6 +103,6 @@ async function createFiveWordData(sourcePaths, destPath) {
 
 // generate the data file
 const sourcePaths = process.env.npm_package_config_sources.split(';').filter((value) => !!value);
-const destFivePath = process.env.npm_package_config_destFive;
+const wordleDataPath = process.env.npm_package_config_wordleData;
 console.log(sourcePaths);
-await createFiveWordData(sourcePaths, destFivePath);
+await createFiveWordData(sourcePaths, wordleDataPath);
