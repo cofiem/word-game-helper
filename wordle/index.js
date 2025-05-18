@@ -1,5 +1,5 @@
 import {Application, Controller} from "https://unpkg.com/@hotwired/stimulus@3.2.2/dist/stimulus.js"
-import WordleWords from "./words.js";
+import WordleWords from "./impl.js";
 
 window.Stimulus = Application.start()
 
@@ -10,11 +10,13 @@ class WordleController extends Controller {
 
     /**
      * Stores the loaded word list.
+     * @type {string[]}
      */
     wordData;
 
     /**
      * Helper class.
+     * @type {WordleWords}
      */
     wordleWords;
 
@@ -26,7 +28,7 @@ class WordleController extends Controller {
      * Load the word data from the server.
      */
     load() {
-        if(!this.wordleWords){
+        if (!this.wordleWords) {
             this.wordleWords = new WordleWords();
         }
         if (!this.wordData) {
@@ -110,20 +112,8 @@ class WordleController extends Controller {
 
         const availableWords = words.length;
         const maxShownWords = 30
-        const randomWordsThreshold = 50;
 
-        // If there are more than 50 words, choose a random set of words.
-        if (availableWords > randomWordsThreshold) {
-            const result = [];
-            let selectedWord = null;
-            do {
-                selectedWord = words[Math.floor(Math.random() * availableWords)];
-                if (!result.includes(selectedWord)) {
-                    result.push(selectedWord)
-                }
-            } while (result.length < maxShownWords)
-            words = result;
-        }
+
 
         // If there are too many words, show only the first 30 words.
         const outcome = words.slice(0, maxShownWords);

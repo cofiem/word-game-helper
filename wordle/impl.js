@@ -83,7 +83,7 @@ export default class WordleWords {
     /**
      * Build the word filter using the attempt information.
      * @param {{filter: (null|{'symbol': string, 'letter': string}[]), raw:string, error: null|string, match: string[]}[]} attempts The array of attempt information.
-     * @return {{('any'|number): {absent: string, present: string}}}
+     * @return {null | {['any'|number]: {absent?: string | undefined, present?: string | undefined}}}
      */
     buildFilter(attempts) {
         let isValid = true;
@@ -91,7 +91,7 @@ export default class WordleWords {
         const filter = this.emptyFilter();
 
         // populate the individual indexes first
-        (attempts || []).forEach((attempt, index) => {
+        (attempts || []).forEach((attempt) => {
             if (!attempt || attempt.error) {
                 isValid = false;
                 console.warn(`${this.#logPrefix} Can't build filter due to invalid attempt.`, attempt);
@@ -124,8 +124,8 @@ export default class WordleWords {
         }
 
         // then make deductions about the overall presence or absence of letters
-        (attempts || []).forEach((attempt, index) => {
-            (attempt.filter || []).forEach((filterItem, filterItemIndex) => {
+        (attempts || []).forEach((attempt) => {
+            (attempt.filter || []).forEach((filterItem) => {
                 const letter = filterItem.letter;
                 const symbol = filterItem.symbol;
 
@@ -160,7 +160,7 @@ export default class WordleWords {
 
     /**
      * Add a letter to the container in the index and group.
-     * @param {{('any'|number): {absent: string, present: string}}} container The container.
+     * @param {{['any'|number]: {absent?: string, present?: string}}} container The container.
      * @param {('any'|number)} index The index.
      * @param {('present'|'absent')} name The group name.
      * @param {string} letter The letter to add.
@@ -196,16 +196,16 @@ export default class WordleWords {
 
     /**
      * Keep only the words that match the filter.
-     * @param {[string]} words All possible words.
-     * @param {{('any'|number): {absent: string, present: string}}} filter Return only words that match this filter.
-     * @return {[string]} The words that match the filter.
+     * @param words {[string]} All possible words.
+     * @param filter {{['any'|number]: {absent?: string | undefined, present?: string | undefined}}} Return only words that match this filter.
+     * @return {string[]} The words that match the filter.
      */
     filterWords(words, filter) {
         if (!filter) {
             console.warn(`${this.#logPrefix} No filter.`);
             return null;
         }
-        const result = (words || []).filter((word) => {
+        let result = (words || []).filter((word) => {
             // word must contain the 'any' 'present' letters
             const anyPresent = Array.from(filter.any.present)
             for (const char of anyPresent) {
@@ -239,6 +239,8 @@ export default class WordleWords {
             return true;
         });
 
+        result = this.orderRemaining(result, filter);
+
         console.info(`${this.#logPrefix} Filter matched ${result.length} words.`, filter);
         return result;
     }
@@ -248,4 +250,139 @@ export default class WordleWords {
         const builtFilter = this.buildFilter(builtAttempts);
         return this.filterWords(words, builtFilter);
     }
+
+    /**
+     * Order words according to the value (likelihood, usefulness) of the word as a next guess.
+     *
+     * @param words {[string]} The words that match the filter.
+     * @param filter {{['any'|number]: {absent?: string | undefined, present?: string | undefined}}} Return only words that match this filter.
+     * @return {[string]} Re-ordered words.
+     */
+    orderRemaining(words, filter) {
+        // value / most likely / most useful is defined as:
+        // - contains more, and different, not-yet-guessed letters
+        // - contains more common letters [done]
+        // - contains letters that exclude the most remaining options [done]
+
+        // Options for ordering:
+        // words = this.orderRandom(words);
+        // this.orderLetterFrequency(words);
+        this.orderExcludeCount(words, filter);
+
+        return words;
+    }
+
+    /**
+     * Order the words in a random order.
+     * @param words {string[]} The possible words.
+     * @return {string[]} The ordered words.
+     */
+    orderRandom(words) {
+        // If there are more than 50 words, choose a random set of words.
+        const maxWordsCount = 50;
+        const availableWords = words.length;
+        const result = [];
+        let selectedWord = null;
+        do {
+            selectedWord = words[Math.floor(Math.random() * availableWords)];
+            if (!result.includes(selectedWord)) {
+                result.push(selectedWord)
+            }
+        } while (result.length < maxWordsCount)
+        return result;
+    }
+
+    /**
+     * Order the words by the letter frequency.
+     * @param words {string[]} The possible words.
+     * @return {string[]} The ordered words.
+     */
+    orderLetterFrequency(words) {
+        // https://en.wikipedia.org/wiki/Letter_frequency
+        const lettersFrequency = "etaoinshrdlcumwfgypbvkxjqz"
+
+        // Letter Frequency
+        // Assign each letter a value from 26 for the first letter to 1 for the last.
+        // The score for a word is the mean of the values.
+
+        const count = lettersFrequency.length;
+        const letters = Array.from(lettersFrequency).map((value, index) => [value, count - index])
+        const lettersMap = new Map(letters);
+        const wordScoreMap = new Map();
+
+        const scoreFunction = function (word) {
+            let wordScore = 0;
+            for (const letter of word) {
+                const letterScore = lettersMap.get(letter);
+                if (letterScore === undefined) {
+                    continue;
+                }
+                wordScore += letterScore;
+            }
+            return wordScore / word.length;
+        };
+
+        const compareFunction = function (a, b) {
+            let aValue;
+            let bValue;
+            if (wordScoreMap.has(a)) {
+                aValue = wordScoreMap.get(a);
+            } else {
+                aValue = scoreFunction(a);
+                wordScoreMap.set(a, aValue);
+            }
+            if (wordScoreMap.has(b)) {
+                bValue = wordScoreMap.get(b);
+            } else {
+                bValue = scoreFunction(b);
+                wordScoreMap.set(b, bValue);
+            }
+
+            return aValue > bValue ? -1 : (aValue < bValue ? 1 : 0);
+        };
+        return words.sort(compareFunction);
+    }
+
+    /**
+     * Order words with the words that exclude the most words first.
+     * @param words {string[]} The possible words.
+     * @param filter {{['any'|number]: {absent?: string | undefined, present?: string | undefined}}} Return only words that match this filter.
+     * @return {string[]} The ordered words.
+     */
+    orderExcludeCount(words, filter) {
+        // Words that exclude the most remaining words
+        // Assuming that a word has no more included letters ('+' or '?').
+        const requiredLetters = filter['any']['present'];
+        const wordsLettersMap = new Map();
+        for (const word of words) {
+            for (const letter of word) {
+                if (requiredLetters.includes(letter)) {
+                    continue;
+                }
+                if (!wordsLettersMap.has(letter)) {
+                    wordsLettersMap.set(letter, []);
+                }
+                wordsLettersMap.get(letter).push(word);
+            }
+        }
+
+        const wordsExcludeCountMap = new Map();
+        for (const word of words) {
+            let excludeCount = 0;
+            const letters = new Set(word);
+            for (const letter of letters) {
+                excludeCount += wordsLettersMap.get(letter)?.length ?? 0;
+            }
+            wordsExcludeCountMap.set(word, excludeCount);
+        }
+
+        const compareFunction = function (a, b) {
+            const aValue = wordsExcludeCountMap.get(a) ?? 0;
+            const bValue = wordsExcludeCountMap.get(b) ?? 0;
+            return aValue > bValue ? -1 : (aValue < bValue ? 1 : 0);
+        };
+
+        return words.sort(compareFunction);
+    }
 }
+

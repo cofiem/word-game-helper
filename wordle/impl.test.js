@@ -1,5 +1,5 @@
 import {expect, test} from 'vitest'
-import WordleWords from "./words.js";
+import WordleWords from "./impl.js";
 
 /*
  * Parse attempts
