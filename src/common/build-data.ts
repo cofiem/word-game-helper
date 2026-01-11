@@ -1,21 +1,13 @@
 import fs from "node:fs/promises";
 import * as path from "path";
-
-function normaliseWord(word) {
-    return word.normalize("NFKD").toLowerCase()
-}
+import {normaliseWord} from "./features.ts";
 
 /**
  * Find files in a directory.
  * @param dirPath The directory.
+ * @param exclude The partial files names to exclude.
  */
-async function findFiles(dirPath) {
-    const exclude = [
-        'abbreviations',
-        'roman-numerals',
-        'hacker',
-        '.95',
-    ];
+async function findFiles(dirPath: string, exclude: string[]) {
     try {
         const foundFiles = [];
 
@@ -46,25 +38,27 @@ async function findFiles(dirPath) {
  * Read file content and process it using a function.
  * @param filePath Path to file.
  */
-async function readFile(filePath) {
+async function readFile(filePath: string) {
     try {
         return fs.readFile(filePath, {encoding: 'utf8'});
     } catch (err) {
-        console.error(err.message);
+        console.error(`Could not read file`, err);
     }
 }
+
 
 /**
  * Generate the word data file.
  * @param sourcePaths The source directories containing the raw files.
+ * @param exclude The partial files names to exclude.
  */
-async function generateWordData(sourcePaths) {
-    const results = new Set();
+async function generateWordData(sourcePaths: string[], exclude: string[]) {
+    const results = new Set<string>();
     for (const sourcePath of sourcePaths) {
-        const filePaths = await findFiles(sourcePath);
+        const filePaths = await findFiles(sourcePath, exclude) ?? [];
         for (const filePath of filePaths) {
-            const fileContent = await readFile(filePath);
-            const words = fileContent.split(/\r?\n/);
+            const fileContent = await readFile(filePath) ?? "";
+            const words = fileContent?.split(/\r?\n/);
             for (const word of words) {
                 results.add(word);
             }
@@ -77,29 +71,28 @@ async function generateWordData(sourcePaths) {
  * Create the data file that contains words with at least five-letters.
  * @param sourcePaths The source directories.
  * @param destPath The destination file.
+ * @param exclude The partial files names to exclude.
+ * @param minLength The minimum word length.
+ * @param maxLength The maximum word length.
  */
-async function createAtLeastFiveWordData(sourcePaths, destPath) {
+export async function createWordData(sourcePaths: string[], destPath: string, exclude: string[], minLength: number, maxLength?: number) {
     const results = new Set();
 
-    const words = await generateWordData(sourcePaths);
+    const words = await generateWordData(sourcePaths, exclude);
     for (const word of words) {
         // get the words, in 'Compatibility Decomposition' form and lower case
         let norm = normaliseWord(word);
-        if (norm.endsWith("'s")){
+        if (norm.endsWith("'s")) {
             norm = norm.substring(0, norm.length - 2);
         }
         const azOnly = norm.replace(/[^a-z]/gi, '');
-        if (azOnly.length >= 5) {
+        if (azOnly.length >= minLength && (maxLength === undefined ? true : azOnly.length <= maxLength)) {
             results.add(azOnly);
         }
     }
 
     const content = JSON.stringify(Array.from(results).sort());
     await fs.writeFile(destPath, content);
-}
 
-// generate the data file
-const sourcePaths = process.env.npm_package_config_sources.split(';').filter((value) => !!value);
-const destPath = process.env.npm_package_config_wordbindData;
-console.log(sourcePaths);
-await createAtLeastFiveWordData(sourcePaths, destPath);
+    console.info(`Generated word data from ${sourcePaths} to ${destPath}`);
+}

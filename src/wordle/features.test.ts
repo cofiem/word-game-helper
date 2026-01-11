@@ -1,12 +1,12 @@
 import {expect, test} from 'vitest'
-import WordleWords from "./impl.js";
+import {buildAttempt, buildFilter, filterWords, wordsFromAttempts} from "./features.ts";
 
 /*
  * Parse attempts
  */
 
 test("valid attempt builds correctly a-r-i-s-e-", () => {
-    expect(new WordleWords().buildAttempt("a-r-i-s-e-")).toStrictEqual({
+    expect(buildAttempt("a-r-i-s-e-")).toStrictEqual({
         "error": null,
         "filter": [
             {"letter": "a", "symbol": "-"},
@@ -19,7 +19,7 @@ test("valid attempt builds correctly a-r-i-s-e-", () => {
     });
 });
 test("valid attempt builds correctly t-o-u?g-h+", () => {
-    expect(new WordleWords().buildAttempt("t-o-u?g-h+")).toStrictEqual({
+    expect(buildAttempt("t-o-u?g-h+")).toStrictEqual({
         "error": null,
         "filter": [
             {"letter": "t", "symbol": "-"},
@@ -32,7 +32,7 @@ test("valid attempt builds correctly t-o-u?g-h+", () => {
     });
 });
 test("valid attempt builds correctly b-u+n+c+h+", () => {
-    expect(new WordleWords().buildAttempt("b-u+n+c+h+")).toStrictEqual({
+    expect(buildAttempt("b-u+n+c+h+")).toStrictEqual({
         "error": null,
         "filter": [
             {"letter": "b", "symbol": "-"},
@@ -45,7 +45,7 @@ test("valid attempt builds correctly b-u+n+c+h+", () => {
     });
 });
 test("valid attempt builds correctly a-r?i-s?e+", () => {
-    expect(new WordleWords().buildAttempt("a-r?i-s?e+")).toStrictEqual({
+    expect(buildAttempt("a-r?i-s?e+")).toStrictEqual({
         "error": null,
         "filter": [
             {"letter": "a", "symbol": "-"},
@@ -58,7 +58,7 @@ test("valid attempt builds correctly a-r?i-s?e+", () => {
     });
 });
 test("valid attempt builds correctly a-r?I?s-e?", () => {
-    expect(new WordleWords().buildAttempt("a-r?I?s-e?")).toStrictEqual({
+    expect(buildAttempt("a-r?I?s-e?")).toStrictEqual({
         "error": null,
         "filter": [
             {"letter": "a", "symbol": "-"},
@@ -71,7 +71,7 @@ test("valid attempt builds correctly a-r?I?s-e?", () => {
     });
 });
 test("invalid attempt fails (no arg)", () => {
-    expect(new WordleWords().buildAttempt()).toStrictEqual({
+    expect(buildAttempt()).toStrictEqual({
         "error": null,
         "filter": null,
         "raw": "",
@@ -79,7 +79,7 @@ test("invalid attempt fails (no arg)", () => {
     });
 });
 test("invalid attempt fails (null)", () => {
-    expect(new WordleWords().buildAttempt(null)).toStrictEqual({
+    expect(buildAttempt(null)).toStrictEqual({
         "error": null,
         "filter": null,
         "raw": "",
@@ -87,7 +87,7 @@ test("invalid attempt fails (null)", () => {
     });
 });
 test("invalid attempt fails blah", () => {
-    expect(new WordleWords().buildAttempt("blah")).toStrictEqual({
+    expect(buildAttempt("blah")).toStrictEqual({
         "error": "Invalid format.",
         "filter": null,
         "raw": "blah",
@@ -95,7 +95,7 @@ test("invalid attempt fails blah", () => {
     });
 });
 test("invalid attempt fails a-r?i-s?e", () => {
-    expect(new WordleWords().buildAttempt("a-r?i-s?e")).toStrictEqual({
+    expect(buildAttempt("a-r?i-s?e")).toStrictEqual({
         "error": "Must be 10 characters: 5 letters and 5 symbols.",
         "filter": null,
         "raw": "a-r?i-s?e",
@@ -103,7 +103,7 @@ test("invalid attempt fails a-r?i-s?e", () => {
     });
 });
 test("invalid attempt fails a-r!i-s?e+", () => {
-    expect(new WordleWords().buildAttempt("a-r!i-s?e+")).toStrictEqual({
+    expect(buildAttempt("a-r!i-s?e+")).toStrictEqual({
         "error": "Must be 10 characters: 5 letters and 5 symbols.",
         "filter": null,
         "raw": "a-r!i-s?e+",
@@ -116,7 +116,7 @@ test("invalid attempt fails a-r!i-s?e+", () => {
  */
 
 test("build filter from no arg", () => {
-    expect(new WordleWords().buildFilter()).toStrictEqual({
+    expect(buildFilter()).toStrictEqual({
         "any": {"present": "", "absent": ""},
         "0": {"present": "", "absent": ""},
         "1": {"present": "", "absent": ""},
@@ -126,7 +126,7 @@ test("build filter from no arg", () => {
     });
 });
 test("build filter from empty array", () => {
-    expect(new WordleWords().buildFilter([])).toStrictEqual({
+    expect(buildFilter([])).toStrictEqual({
         "any": {"present": "", "absent": ""},
         "0": {"present": "", "absent": ""},
         "1": {"present": "", "absent": ""},
@@ -136,7 +136,7 @@ test("build filter from empty array", () => {
     });
 });
 test("build filter from attempts [a-r?i-s?e+]", () => {
-    expect(new WordleWords().buildFilter([
+    expect(buildFilter([
         {
             "error": null,
             "filter": [
@@ -158,7 +158,7 @@ test("build filter from attempts [a-r?i-s?e+]", () => {
     });
 });
 test("build filter from attempts [a-r?i-s?e]", () => {
-    expect(new WordleWords().buildFilter([
+    expect(buildFilter([
         {
             "error": "Must be 10 characters: 5 letters and 5 symbols.",
             "filter": null,
@@ -168,7 +168,7 @@ test("build filter from attempts [a-r?i-s?e]", () => {
     ])).toStrictEqual(null);
 });
 test("build filter from attempts [a-r-i-s-e-,t-o-u?g-h+,b-u+n+c+h+]", () => {
-    expect(new WordleWords().buildFilter([
+    expect(buildFilter([
         {
             "error": null,
             "filter": [
@@ -213,7 +213,7 @@ test("build filter from attempts [a-r-i-s-e-,t-o-u?g-h+,b-u+n+c+h+]", () => {
 });
 
 test("build filter from attempts that don't make sense [a-r?i-s?e+,t-o-u?g-h+]", () => {
-    expect(new WordleWords().buildFilter([
+    expect(buildFilter([
         {
             "error": null,
             "filter": [
@@ -252,10 +252,10 @@ test("build filter from attempts that don't make sense [a-r?i-s?e+,t-o-u?g-h+]",
 const testingWords = ['arise', 'tough', 'party', 'booms'];
 
 test("filter words no args", () => {
-    expect(new WordleWords().filterWords()).toStrictEqual(null);
+    expect(filterWords()).toStrictEqual(null);
 });
 test("filter words no words", () => {
-    expect(new WordleWords().filterWords(null, {
+    expect(filterWords(null, {
         "any": {"present": "", "absent": ""},
         "0": {"present": "", "absent": ""},
         "1": {"present": "", "absent": ""},
@@ -265,10 +265,10 @@ test("filter words no words", () => {
     })).toStrictEqual([]);
 });
 test("filter words no filter", () => {
-    expect(new WordleWords().filterWords(testingWords)).toStrictEqual(null);
+    expect(filterWords(testingWords)).toStrictEqual(null);
 });
 test("filter words empty filter", () => {
-    expect(new WordleWords().filterWords(
+    expect(filterWords(
         testingWords,
         {
             "any": {"present": "", "absent": ""},
@@ -280,7 +280,7 @@ test("filter words empty filter", () => {
         })).toStrictEqual(testingWords);
 });
 test("filter words filter with no matches", () => {
-    expect(new WordleWords().filterWords(
+    expect(filterWords(
         testingWords,
         {
             "any": {"present": "u", "absent": "arisetogb"},
@@ -292,8 +292,8 @@ test("filter words filter with no matches", () => {
         })).toStrictEqual([]);
 });
 test("filter words filter with some matches", () => {
-    expect(new WordleWords().filterWords(
-        [].concat(testingWords).concat(['lunch']),
+    expect(filterWords(
+        ([] as string[]).concat(testingWords).concat(['lunch']),
         {
             "any": {"present": "u", "absent": "arisetogb"},
             "0": {"present": "", "absent": "arisetogb"},
@@ -308,19 +308,19 @@ test("filter words filter with some matches", () => {
  * Attempts to words
  */
 test("words from attempts that are valid", () => {
-    expect(new WordleWords().wordsFromAttempts(
+    expect(wordsFromAttempts(
         ['a+r-i-s-e-', 'a+u-n-t-y-', 'a+b-a-c-k-', 'a+l+l-o+w-', 'a+l+o+o+f+'],
         ['arise', 'aunty', 'aback', 'allow', 'aloof', 'remix'])
     ).toStrictEqual(['aloof']);
 });
 test("words from attempts that don't make sense one left", () => {
-    expect(new WordleWords().wordsFromAttempts(
+    expect(wordsFromAttempts(
         ['a-r?i-s?e+', 't-o-u?g-h+'],
         ['arise', 'aunty', 'aback', 'allow', 'aloof', 'remix', 'lunch', 'tough', 'touch', 'sprue'])
     ).toStrictEqual(['sprue']);
 });
 test("words from attempts that don't make sense none left", () => {
-    expect(new WordleWords().wordsFromAttempts(
+    expect(wordsFromAttempts(
         ['a-r?i-s?e+', 't-o-u?g-h+', 's-p-r-u-e-'],
         ['arise', 'aunty', 'aback', 'allow', 'aloof', 'remix', 'lunch', 'tough', 'touch', 'sprue'])
     ).toStrictEqual([]);
