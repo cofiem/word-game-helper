@@ -3,6 +3,7 @@ const logPrefix = '[Word Game Helper]';
 
 export type Word = string;
 export type Words = string[];
+export type Letters = string[];
 
 /**
  * Filter the words using the value.
