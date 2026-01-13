@@ -1,0 +1,34 @@
+name: Run tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "**" ]
+
+permissions: { }
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-24.04
+    permissions: { }
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install nodejs
+        uses: actions/setup-node@v6.1.0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4.2.0
+        with:
+          cache: true
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Run tests with coverage
+        run: pnpm run coverage

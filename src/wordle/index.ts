@@ -1,24 +1,29 @@
-import {Application, Controller} from "https://unpkg.com/@hotwired/stimulus@3.2.2/dist/stimulus.js"
-import WordleWords from "./impl.js";
+import {Application, Controller} from "@hotwired/stimulus";
+import {type Attempt, buildAttempt, buildFilter, filterWords} from "./features.ts";
+import type {Word} from "../common/features.ts";
+
+import './style.scss'
 
 window.Stimulus = Application.start()
 
 
-class WordleController extends Controller {
+export default class WordleController extends Controller {
     static targets = ["attempt", "list", "item", "itemTemplate", "wordsShown", "wordsMatch", "form"];
     static values = {url: String};
 
-    /**
-     * Stores the loaded word list.
-     * @type {string[]}
-     */
-    wordData;
+    declare readonly urlValue: string;
+    declare readonly formTarget: HTMLFormElement;
+    declare readonly itemTargets: HTMLDivElement[];
+    declare readonly wordsShownTarget: HTMLSpanElement;
+    declare readonly wordsMatchTarget: HTMLSpanElement;
+    declare readonly itemTemplateTarget: HTMLTemplateElement;
+    declare readonly listTarget: HTMLDivElement;
+    declare readonly attemptTargets: HTMLInputElement[];
 
     /**
-     * Helper class.
-     * @type {WordleWords}
+     * Stores the loaded word list.
      */
-    wordleWords;
+    words?: string[];
 
     connect() {
         this.load();
@@ -28,14 +33,11 @@ class WordleController extends Controller {
      * Load the word data from the server.
      */
     load() {
-        if (!this.wordleWords) {
-            this.wordleWords = new WordleWords();
-        }
-        if (!this.wordData) {
+        if (!this.words) {
             fetch(this.urlValue)
                 .then(response => response.json())
                 .then(data => {
-                    this.wordData = data;
+                    this.words = data;
                 })
                 .then(() => {
                     this.refresh();
@@ -68,63 +70,65 @@ class WordleController extends Controller {
         words.shown.forEach((value) => this.addWordCard(value));
 
         // update the shown / available display
-        this.wordsShownTarget.textContent = words.shown.length;
-        this.wordsMatchTarget.textContent = words.availableCount;
+        this.wordsShownTarget.textContent = words.shown.length.toString();
+        this.wordsMatchTarget.textContent = words.availableCount.toString();
     }
 
     /**
      * When any of the attempt entries change, updated the list of words.
      * @param event
      */
-    entryChanged(event) {
+    entryChanged(event: Event) {
+        event.preventDefault();
         this.refresh();
     }
 
     /**
      * Add a word card.
-     * @param {string} value The word.
+     * @param  value The word.
      */
-    addWordCard(value) {
-        const item = this.itemTemplateTarget.content.cloneNode(true);
+    addWordCard(value: Word) {
+        const item = this.itemTemplateTarget.content.cloneNode(true) as DocumentFragment;
         const cardText = item.querySelector('.card-text');
-        cardText.textContent = value;
-        this.listTarget.append(item);
+        if (cardText) {
+            cardText.textContent = value;
+            this.listTarget.append(item);
+        }
     }
 
     /**
      * Parse the attempt entry from the element.
      * @param element The element containing the entry value.
-     * @return {{filter: (null|{'symbol': string, 'letter': string}[]), raw:string, error: null|string, match: string[]}[]} Parsed result.
+     * @return Parsed result.
      */
-    attemptEntry(element) {
+    attemptEntry(element: HTMLInputElement): Attempt {
         const raw = element.value;
-        return this.wordleWords.buildAttempt(raw);
+        return buildAttempt(raw);
     }
 
     /**
      * Get the words that fulfill the restrictions created by the entered attempts.
-     * @param {{filter: (null|{'symbol': string, 'letter': string}[]), raw:string, error: null|string, match: string[]}[]} attempts
-     * @return {{show:string[],availableCount:number} The possible words.
+     * @param  attempts
+     * @return  The possible words.
      */
-    filterWords(attempts) {
-        const filter = this.wordleWords.buildFilter(attempts);
-        let words = this.wordleWords.filterWords(this.wordData, filter) || this.wordData;
+    filterWords(attempts: Attempt[]): { shown: string[], availableCount: number } {
+        const filter = buildFilter(attempts);
+        let words = filterWords(this.words, filter) || this.words;
 
-        const availableWords = words.length;
+        const availableWords = words?.length;
         const maxShownWords = 30
 
 
-
         // If there are too many words, show only the first 30 words.
-        const outcome = words.slice(0, maxShownWords);
+        const outcome = words?.slice(0, maxShownWords);
 
         return {
-            'shown': outcome,
-            'availableCount': availableWords,
+            shown: outcome ?? [],
+            availableCount: availableWords ?? 0,
         };
     }
 
-    validate(element, attemptInfo) {
+    validate(element: HTMLInputElement, attemptInfo: Attempt) {
         const value = element.value;
         if (value.length < 1) {
             element.classList.add('is-valid');
@@ -136,4 +140,4 @@ class WordleController extends Controller {
     }
 }
 
-Stimulus.register("wordle", WordleController);
+window.Stimulus.register("wordle", WordleController);
