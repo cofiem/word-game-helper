@@ -2,6 +2,7 @@ const logPrefix = '[Word Game Helper]';
 
 
 export type Word = string;
+export type Letter = string;
 export type Words = string[];
 export type Letters = string[];
 

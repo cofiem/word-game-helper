@@ -23,268 +23,289 @@
     <form class="needs-validation mt-3" novalidate data-foximax-target="form" id="foximax-form">
         <div class="container text-center">
 
-            <div class="row row-cols-3 mb-2 pb-2 align-items-center border-bottom border-secondary-subtle">
-                <div class="col-md-1 col-sm">Entered</div>
-                <div class="col-md-11 col-sm">
+            <div class="row mb-2 align-items-center">
+                <div class="col-2 col-md-1">Letters</div>
+                <div class="col-10 col-md-11">
                     <input type="text" class="form-control form-control-lg" id="entered" autocomplete="off" pattern="[a-zA-Z]+"
                            data-foximax-target="entered" data-action="keyup->foximax#entryChanged">
                     <label for="entered" class="visually-hidden">Entered letters</label>
                 </div>
             </div>
+            <div class="row mb-2 align-items-center border-bottom border-secondary-subtle">
+            <div class="col col">
+                <span data-foximax-target="hint" id="hint1"></span>
+            </div>
+            </div>
 
-            <div class="row row-cols-5 mb-3 align-items-center">
-                <div class="col-md-1 col-sm-2">1</div>
-                <div class="col-md-1 col-sm-2">
-                    <input type="text" class="form-control form-control-lg" id="found1_1" autocomplete="off" maxlength="1" minlength="0"
+            <div class="row gx-2 mb-3 align-items-center">
+                <div class="col-1 col-md-1">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="shown1" value="shown1">
+                        <label class="form-check-label visually-hidden" for="shown1">1</label>
+                    </div>
+                </div>
+                <div class="col col-md-1">
+                    <input type="text" class="form-control form-control-lg text-center" id="found1_1" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found1_1" class="visually-hidden">Row one, letter one</label>
                 </div>
-                <div class="col-md-1 col-sm-2">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found1_2" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found1_2" class="visually-hidden">Row one, letter two</label>
                 </div>
-                <div class="col-md-1 col-sm-2">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found1_3" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found1_3" class="visually-hidden">Row one, letter three</label>
                 </div>
-                <div class="col-md-1 col-sm-2">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found1_4" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found1_4" class="visually-hidden">Row one, letter four</label>
                 </div>
-                <div class="col-md-1 col-sm-2">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found1_5" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found1_5" class="visually-hidden">Row one, letter five</label>
                 </div>
-                <div class="col-md-1 col-sm">
-                    <span data-foximax-target="hint" id="hint1"></span>
-                </div>
             </div>
 
-            <div class="row mb-3 align-items-center">
-                <div class="col-md-1">2</div>
-                <div class="col-md-1">
+            <div class="row gx-2 mb-3 align-items-center">
+                <div class="col-1 col-md-1">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="shown2" value="shown2">
+                        <label class="form-check-label visually-hidden" for="shown2">2</label>
+                    </div>
+                </div>
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found2_1" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found2_1" class="visually-hidden">Row two, letter one</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found2_2" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found2_2" class="visually-hidden">Row two, letter two</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found2_3" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found2_3" class="visually-hidden">Row two, letter three</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found2_4" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found2_4" class="visually-hidden">Row two, letter four</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found2_5" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found2_5" class="visually-hidden">Row two, letter five</label>
                 </div>
-                <div class="col-md-1 col-sm">
-                    <span data-foximax-target="hint" id="hint2"></span>
-                </div>
             </div>
 
-            <div class="row mb-3 align-items-center">
-                <div class="col-md-1">3</div>
-                <div class="col-md-1">
+            <div class="row gx-2 mb-3 align-items-center">
+                <div class="col-1 col-md-1">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="shown3" value="shown3">
+                        <label class="form-check-label visually-hidden" for="shown3">3</label>
+                    </div>
+                </div>
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found3_1" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found3_1" class="visually-hidden">Row three, letter one</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found3_2" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found3_2" class="visually-hidden">Row three, letter two</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found3_3" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found3_3" class="visually-hidden">Row three, letter three</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found3_4" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found3_4" class="visually-hidden">Row three, letter four</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found3_5" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found3_5" class="visually-hidden">Row three, letter five</label>
                 </div>
-                <div class="col-md-1 col-sm">
-                    <span data-foximax-target="hint" id="hint3"></span>
-                </div>
             </div>
 
-            <div class="row mb-3 align-items-center">
-                <div class="col-md-1">4</div>
-                <div class="col-md-1">
+            <div class="row gx-2 mb-3 align-items-center">
+                <div class="col-1 col-md-1">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="shown4" value="shown4">
+                        <label class="form-check-label visually-hidden" for="shown4">4</label>
+                    </div>
+                </div>
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found4_1" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found4_1" class="visually-hidden">Row four, letter one</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found4_2" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found4_2" class="visually-hidden">Row four, letter two</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found4_3" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found4_3" class="visually-hidden">Row four, letter three</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found4_4" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found4_4" class="visually-hidden">Row four, letter four</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found4_5" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found4_5" class="visually-hidden">Row four, letter five</label>
                 </div>
-                <div class="col-md-1 col-sm">
-                    <span data-foximax-target="hint" id="hint4"></span>
-                </div>
             </div>
 
-            <div class="row mb-3 align-items-center">
-                <div class="col-md-1">5</div>
-                <div class="col-md-1">
+            <div class="row gx-2 mb-3 align-items-center">
+                <div class="col-1 col-md-1">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="shown5" value="shown5">
+                        <label class="form-check-label visually-hidden" for="shown5">5</label>
+                    </div>
+                </div>
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found5_1" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found5_1" class="visually-hidden">Row five, letter one</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found5_2" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found5_2" class="visually-hidden">Row five, letter two</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found5_3" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found5_3" class="visually-hidden">Row five, letter three</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found5_4" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found5_4" class="visually-hidden">Row five, letter four</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found5_5" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found5_5" class="visually-hidden">Row five, letter five</label>
                 </div>
-                <div class="col-md-1 col-sm">
-                    <span data-foximax-target="hint" id="hint5"></span>
-                </div>
             </div>
 
-            <div class="row mb-3 align-items-center">
-                <div class="col-md-1">6</div>
-                <div class="col-md-1">
+            <div class="row gx-2 mb-3 align-items-center">
+                <div class="col-1 col-md-1">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="shown6" value="shown6">
+                        <label class="form-check-label visually-hidden" for="shown6">6</label>
+                    </div>
+                </div>
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found6_1" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found6_1" class="visually-hidden">Row six, letter one</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found6_2" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found6_2" class="visually-hidden">Row six, letter two</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found6_3" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found6_3" class="visually-hidden">Row six, letter three</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found6_4" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found6_4" class="visually-hidden">Row six, letter four</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found6_5" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found6_5" class="visually-hidden">Row six, letter five</label>
                 </div>
-                <div class="col-md-1 col-sm">
-                    <span data-foximax-target="hint" id="hint6"></span>
-                </div>
             </div>
 
-            <div class="row mb-3 align-items-center">
-                <div class="col-md-1">7</div>
-                <div class="col-md-1">
+            <div class="row gx-2 mb-3 align-items-center">
+                <div class="col-1 col-md-1">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="shown7" value="shown7">
+                        <label class="form-check-label visually-hidden" for="shown7">7</label>
+                    </div>
+                </div>
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found7_1" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found7_1" class="visually-hidden">Row seven, letter one</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found7_2" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found7_2" class="visually-hidden">Row seven, letter two</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found7_3" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found7_3" class="visually-hidden">Row seven, letter three</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found7_4" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found7_4" class="visually-hidden">Row seven, letter four</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found7_5" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found7_5" class="visually-hidden">Row seven, letter five</label>
                 </div>
-                <div class="col-md-1 col-sm">
-                    <span data-foximax-target="hint" id="hint7"></span>
-                </div>
             </div>
 
-            <div class="row mb-3 align-items-center">
-                <div class="col-md-1">8</div>
-                <div class="col-md-1">
+            <div class="row gx-2 mb-3 align-items-center">
+                <div class="col-1 col-md-1">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="shown8" value="shown8">
+                        <label class="form-check-label visually-hidden" for="shown8">8</label>
+                    </div>
+                </div>
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found8_1" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found8_1" class="visually-hidden">Row eight, letter one</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found8_2" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found8_2" class="visually-hidden">Row eight, letter two</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found8_3" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found8_3" class="visually-hidden">Row eight, letter three</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found8_4" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found8_4" class="visually-hidden">Row eight, letter four</label>
                 </div>
-                <div class="col-md-1">
+                <div class="col col-md-1">
                     <input type="text" class="form-control form-control-lg" id="found8_5" autocomplete="off" maxlength="1" minlength="0"
                            data-foximax-target="found" data-action="keyup->foximax#entryChanged">
                     <label for="found8_5" class="visually-hidden">Row eight, letter five</label>
-                </div>
-                <div class="col-md-1 col-sm">
-                    <span data-foximax-target="hint" id="hint8"></span>
                 </div>
             </div>
         </div>

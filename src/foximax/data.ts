@@ -12,5 +12,4 @@ const exclude = [
     '.80',
     '.95',
 ];
-console.log(sourcePaths);
 await createWordData(sourcePaths, wordleDataPath, exclude, 5, 5);
