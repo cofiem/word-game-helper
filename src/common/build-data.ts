@@ -1,6 +1,6 @@
-import fs from "node:fs/promises";
-import * as path from "path";
+import {lstat, readdir, readFile, writeFile} from "node:fs/promises";
 import {normaliseWord} from "./features.ts";
+import {join} from "node:path";
 
 /**
  * Find files in a directory.
@@ -11,10 +11,10 @@ async function findFiles(dirPath: string, exclude: string[]) {
     try {
         const foundFiles = [];
 
-        const files = await fs.readdir(dirPath);
+        const files = await readdir(dirPath);
         for (const file of files) {
-            const fullFile = path.join(dirPath, file);
-            const fileStat = await fs.lstat(fullFile);
+            const fullFile = join(dirPath, file);
+            const fileStat = await lstat(fullFile);
             const isFile = fileStat.isFile();
             if (!isFile) {
                 continue;
@@ -38,9 +38,9 @@ async function findFiles(dirPath: string, exclude: string[]) {
  * Read file content and process it using a function.
  * @param filePath Path to file.
  */
-async function readFile(filePath: string) {
+async function readDataFile(filePath: string) {
     try {
-        return fs.readFile(filePath, {encoding: 'utf8'});
+        return readFile(filePath, {encoding: 'utf8'});
     } catch (err) {
         console.error(`Could not read file`, err);
     }
@@ -57,7 +57,7 @@ async function generateWordData(sourcePaths: string[], exclude: string[]) {
     for (const sourcePath of sourcePaths) {
         const filePaths = await findFiles(sourcePath, exclude) ?? [];
         for (const filePath of filePaths) {
-            const fileContent = await readFile(filePath) ?? "";
+            const fileContent = await readDataFile(filePath) ?? "";
             const words = fileContent?.split(/\r?\n/);
             for (const word of words) {
                 results.add(word);
@@ -92,7 +92,7 @@ export async function createWordData(sourcePaths: string[], destPath: string, ex
     }
 
     const content = JSON.stringify(Array.from(results).sort());
-    await fs.writeFile(destPath, content);
+    await writeFile(destPath, content);
 
     console.info(`Generated word data from ${sourcePaths} to ${destPath}`);
 }
