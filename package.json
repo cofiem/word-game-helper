@@ -23,7 +23,7 @@
     "foximaxData": "./src/foximax/data.json"
   },
   "devDependencies": {
-    "@types/node": "25.1.0",
+    "@types/node": "25.2.2",
     "@vitest/coverage-v8": "4.0.18",
     "ts-node": "10.9.2",
     "typescript": "5.9.3",
